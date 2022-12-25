@@ -1,4 +1,6 @@
 import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Main {
 
@@ -8,50 +10,12 @@ public class Main {
 		
 		String line = sc.nextLine();
 		
-		String harp = null;
-		char op=' ';
-		int turns;
-		int tokenStart = 0;
-		int tokenEnd = 0;
-		boolean afterOp = false;
-		
-		for (int i=0;i<line.length();i++) {
-			char c = line.charAt(i);
-			if (c == '+' || c== '-') {
-				tokenEnd = i;
-				op = c;
-				harp = line.substring(tokenStart, tokenEnd);
-				tokenStart = i+1;
-				afterOp = true;
-			} else if (afterOp && Character.isAlphabetic(c)) {
-				tokenEnd = i;
-				String sTurns = line.substring(tokenStart, tokenEnd);
-				turns = Integer.parseInt(sTurns);
-				print(harp, op, turns);
-				afterOp = false;
-				tokenStart = i;
-			}
+		Matcher m = Pattern.compile("[A-Z]+[+-]\\d+").matcher(line);
+		while (m.find()) {
+			String op = m.group(); 
+			String replaced = op.replace("+", " tighten ");
+			replaced = replaced.replace("-", " loosen ");
+			System.out.println(replaced);
 		}
-		turns = Integer.parseInt(line.substring(tokenStart));
-		print(harp, op, turns);
-		
 	}
-
-	private static void print(String harp, char op, int turns) {
-		// TODO Auto-generated method stub
-		String s="";
-		s+=harp+" ";
-		if (op == '+')
-			s+= "tighten ";
-		else 
-			s+="loosen ";
-		s+= turns;
-		
-		System.out.println(s);
-	}
-	
-	
-	
-	
-
 }
